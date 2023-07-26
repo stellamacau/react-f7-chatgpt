@@ -2,20 +2,20 @@ import { createStore } from "framework7/lite";
 
 // Define States
 let state = {
-  count: 0,
+  messagesData: [],
 };
 
 // Define Getters
 const getters = {
-  count({ state }) {
-    return state.count;
+  messagesData({ state }) {
+    return state.messagesData;
   },
 };
 
 // Define Actions
 const actions = {
-  setCount({ state }, newValue) {
-    state.count = newValue;
+  setMessagesData({ state }, newValue) {
+    state.messagesData = newValue;
   },
 };
 

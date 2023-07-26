@@ -9,28 +9,26 @@ import {
   Link,
   f7ready,
   f7,
+  useStore,
 } from "framework7-react";
+
+const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
 export default () => {
   const [typingMessage, setTypingMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
-  const [messagesData, setMessagesData] = useState([
-    {
-      type: "sent",
-      text: "How are you?",
-    },
-    {
-      name: "ChatGPT",
-      type: "received",
-      text: "Hi, I am good!",
-    },
-  ]);
+  // const [messagesData, setMessagesData] = useState([]);
+  const messagesData = useStore("messagesData");
 
   useEffect(() => {
     f7ready(() => {
       /*    */
     });
   }, []);
+
+  const setMessagesData = (data) => {
+    f7.store.dispatch("setMessagesData", data);
+  };
 
   const isFirstMessage = (message, index) => {
     const previousMessage = messagesData[index - 1];
@@ -68,42 +66,64 @@ export default () => {
     return false;
   };
 
-  const sendMessage = () => {
-    const text = messageText.replace(/\n/g, "<br>").trim();
-    const messagesToSend = [];
+  const sendMessage = async () => {
+    const text = messageText.trim();
 
-    if (text.length) {
-      messagesToSend.push({
-        type: "sent",
-        text: text,
-      });
-    }
-    if (messagesToSend.length === 0) {
-      return;
-    }
+    if (text.length === 0) return;
 
-    setMessagesData([...messagesData, ...messagesToSend]);
+    const newMessageData = [...messagesData];
+    newMessageData.push({
+      type: "sent",
+      text: text,
+    });
+
+    setMessagesData(newMessageData);
     setMessageText("");
 
     //Show loading indicator
     setTypingMessage(true);
     //ChatGPT API
 
-    fetch(`https://api.openai.com/v1/chat/completions`, {
+    const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
       method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        //  Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         temperature: 0.7,
-        messages: messageText,
+        messages: newMessageData
+          .map((message) => {
+            return {
+              role: message.type === "sent" ? "user" : "assistant",
+              content: message.text,
+            };
+          })
+          .slice(-4),
       }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer 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",
-      },
     });
 
-    setMessagesData((prevMessagesData) => {
+    const data = await response.json();
+
+    console.log(data);
+
+    if (data.choices.length > 0) {
+      const replyFromChatGPT = data.choices[0].message.content;
+
+      newMessageData.push({
+        type: "received",
+        text: replyFromChatGPT,
+      });
+      setMessagesData(newMessageData);
+    }
+
+    setTypingMessage(false);
+
+    //  console.log(data);
+
+    /* setMessagesData((prevMessagesData) => {
       return [
         ...prevMessagesData,
         {
