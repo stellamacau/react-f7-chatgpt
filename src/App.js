@@ -7,6 +7,7 @@ import AboutPage from "./pages/AboutPage";
 import ArticlePage from "./pages/ArticlePage";
 import ShowArticlePage from "./pages/ShowArticlePage";
 import MessagePage from "./pages/MessagePage";
+import SettingPage from "./pages/SettingPage";
 
 const f7params = {
   name: "My App",
@@ -18,9 +19,12 @@ const f7params = {
     {
       path: "/",
       component: MessagePage,
-
-      //  component: HomePage,
     },
+
+    /* {
+      path: "/message/",
+      component: MessagePage,
+    },*/
     {
       path: "/about/",
       component: AboutPage,
@@ -32,6 +36,10 @@ const f7params = {
     {
       path: "/show/",
       component: ShowArticlePage,
+    },
+    {
+      path: "/settings/",
+      component: SettingPage,
     },
   ],
 };
