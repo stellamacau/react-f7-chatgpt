@@ -2,42 +2,62 @@ import { createStore } from "framework7/lite";
 
 // Define States
 let state = {
+  conversations: [],
   messagesData: [],
-  temperature: 0.7,
-  context: 4,
+  // temperature: 0.7,
+  // context: 6,
 };
 
 // Define Getters
 const getters = {
+  conversations({ state }) {
+    return state.conversations;
+  },
   messagesData({ state }) {
     return state.messagesData;
   },
-  temperature({ state }) {
-    return state.temperature;
-  },
-  context({ state }) {
-    return state.context;
-  },
+  // temperature({ state }) {
+  //   return state.temperature;
+  // },
+  // context({ state }) {
+  //   return state.context;
+  // },
 };
 
 // Define Actions
 const actions = {
+  setConversations({ state }, newValue) {
+    state.conversations = newValue;
+  },
   setMessagesData({ state }, newValue) {
     state.messagesData = newValue;
   },
-  setTemperature({ state }, newValue) {
-    state.temperature = newValue;
-  },
-  setContext({ state }, newValue) {
-    state.context = newValue;
-  },
+  // setTemperature({ state }, newValue) {
+  //   state.temperature = newValue;
+  // },
+  // setContext({ state }, newValue) {
+  //   state.context = newValue;
+  // },
 };
 
 if (typeof window !== "undefined") {
-  const savedState = localStorage.getItem("state");
+  const savedState = window.localStorage.getItem("state");
 
   if (savedState) {
-    state = JSON.parse(savedState);
+    const savedStateObject = JSON.parse(savedState);
+
+    const shapeOfCurrentState = Object.keys(state);
+    const shapeOfSavedState = Object.keys(savedStateObject);
+
+    if (
+      shapeOfSavedState.length === shapeOfSavedState.length &&
+      shapeOfCurrentState.every((key) => shapeOfSavedState.includes(key))
+    ) {
+      state = savedStateObject;
+    } else {
+      console.log(`store shape changed!`);
+      window.localStorage.removeItem("state");
+    }
   }
 }
 
@@ -54,7 +74,7 @@ store.state = new Proxy(store.state, {
     // save to localStorage
     if (typeof window !== "undefined") {
       const currentState = JSON.stringify(store.state);
-      localStorage.setItem("state", currentState);
+      window.localStorage.setItem("state", currentState);
     }
 
     return true;

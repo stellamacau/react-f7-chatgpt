@@ -4,7 +4,7 @@ const HomePage = () => {
   return (
     <>
       <Page>
-        <Navbar title="About" backLink="Back"></Navbar>
+        <Navbar title="About" backLink="Profile"></Navbar>
         <Block>
           <p>Page content goes here</p>
         </Block>

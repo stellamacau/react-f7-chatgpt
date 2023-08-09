@@ -1,13 +1,14 @@
 import { App, View } from "framework7-react";
 
-import store from "./store";
-
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
-import ArticlePage from "./pages/ArticlePage";
-import ShowArticlePage from "./pages/ShowArticlePage";
+import SinglePage from "./pages/SinglePage";
+import DataPage from "./pages/DataPage";
 import MessagePage from "./pages/MessagePage";
 import SettingPage from "./pages/SettingPage";
+import ConversationPage from "./pages/ConversationPage";
+
+import store from "./store";
 
 const f7params = {
   name: "My App",
@@ -18,28 +19,31 @@ const f7params = {
   routes: [
     {
       path: "/",
-      component: MessagePage,
+      component: HomePage,
     },
-
-    /* {
-      path: "/message/",
-      component: MessagePage,
-    },*/
     {
       path: "/about/",
       component: AboutPage,
     },
     {
-      path: "/article/:id/",
-      component: ArticlePage,
+      path: "/single/:id/",
+      component: SinglePage,
     },
     {
-      path: "/show/",
-      component: ShowArticlePage,
+      path: "/data/",
+      component: DataPage,
     },
     {
-      path: "/settings/",
+      path: "/message/:id/",
+      component: MessagePage,
+    },
+    {
+      path: "/setting/:id/",
       component: SettingPage,
+    },
+    {
+      path: "/conversation/",
+      component: ConversationPage,
     },
   ],
 };

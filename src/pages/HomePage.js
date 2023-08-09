@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   Page,
   Navbar,
@@ -11,8 +10,8 @@ import {
 } from "framework7-react";
 
 const HomePage = ({ f7router }) => {
+  // const [count, setCount] = useState(0);
   const count = useStore("count");
-  const [id, setId] = useState("");
 
   return (
     <>
@@ -21,56 +20,49 @@ const HomePage = ({ f7router }) => {
         {/* Top Navbar */}
         <Navbar title="Awesome App">
           <Link slot="left">Left Link</Link>
-          <Link slot="right">Right Link</Link>
+          <Link slot="right" href="/about/">
+            About
+          </Link>
         </Navbar>
         {/* Toolbar */}
         <Toolbar bottom>
           <Link>Link 1</Link>
           <Link>Link 2</Link>
         </Toolbar>
-        <h2>count: {count}</h2>
+
+        <h2>Count: {count}</h2>
         <Button
           onClick={() => {
             f7.store.dispatch("setCount", count + 1);
           }}
         >
-          Add
+          Increment
         </Button>
+
         {/* Page Content */}
-        <Block>
+        {/* <Block>
           <p>Page content goes here</p>
           <Link href="/about/">Link to About App</Link>
         </Block>
         <Block>
-          <input
-            type="text"
-            className="w-full border px-3 py-2 rounded border-slate-400"
-            placeholder="Note title"
-            name="id"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
+          <p>Go to page by ID</p>
+          <Link href="/single/1/">Go to ID: 1</Link>
         </Block>
         <Block>
-          <Button fill href="/article/1/">
-            Go to Article ID: {id}
-          </Button>
-        </Block>
-        <Block>
+          <p>Go to page by sending data</p>
           <Button
-            fill
             onClick={() => {
-              f7router.navigate("/show/", {
+              f7router.navigate("/data/", {
                 props: {
-                  title: "The Title",
-                  body: "This is the body",
+                  title: "AAA",
+                  content: "BBB",
                 },
               });
             }}
           >
-            Send via Navigate API
+            Send title: AAA, content: BBB
           </Button>
-        </Block>
+        </Block> */}
       </Page>
     </>
   );
